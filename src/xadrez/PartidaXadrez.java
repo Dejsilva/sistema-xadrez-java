@@ -26,8 +26,8 @@ public class PartidaXadrez {
 	}
 	
 	private void inicialConf() {
-		tabuleiro.reposicaoPeca(new Torre(tabuleiro, Cor.BRANCO),  new Posicao(2,1));
-		tabuleiro.reposicaoPeca(new King(tabuleiro, Cor.PRETO), new Posicao(0,4));
-		tabuleiro.reposicaoPeca(new King(tabuleiro, Cor.BRANCO), new Posicao(7,4));
+		tabuleiro.reposicaoPeca(new Torre(tabuleiro, Cor.BRANCO), new Posicao(9, 1));
+		tabuleiro.reposicaoPeca(new King(tabuleiro, Cor.PRETO),   new Posicao(0, 4));
+		tabuleiro.reposicaoPeca(new King(tabuleiro, Cor.BRANCO),  new Posicao(7, 4));
 	}
 }
