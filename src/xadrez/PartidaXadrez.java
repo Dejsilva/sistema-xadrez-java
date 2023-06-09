@@ -2,7 +2,6 @@ package xadrez;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import jogoTabuleiro.Peca;
@@ -18,6 +17,7 @@ public class PartidaXadrez {
 	private Cor jogadorAtual;
 	private Tabuleiro tabuleiro;
 	private boolean check;
+	private boolean checkMate;	
 	
 	private List<Peca> pecasNoTabuleiro = new ArrayList<>();
 	private List<Peca> pecasCapturadas = new ArrayList<>();
@@ -41,6 +41,10 @@ public class PartidaXadrez {
 	
 	public boolean getCheck() {
 		return check;
+	}
+	
+	public boolean getCheckMate() {
+		return checkMate;
 	}
 	
 	public PecaXadrez[][] getPecas() {
@@ -74,7 +78,13 @@ public class PartidaXadrez {
 		
 		check = (testarCheck(oponente(jogadorAtual))) ? true : false ;
 		
-		proximoTurno();
+		if(testarCheckMate(oponente(jogadorAtual))) {
+			checkMate = true;
+		}
+		else {
+			proximoTurno();
+		}
+		
 		return (PecaXadrez)capturarPeca;
 	}
 	
@@ -151,25 +161,43 @@ public class PartidaXadrez {
 		return false;
 	}
 	
+	private boolean testarCheckMate(Cor cor) {
+		if(!testarCheck(cor)) {
+			return false;
+		}
+		List<Peca> list = pecasNoTabuleiro.stream().filter(x -> ((PecaXadrez)x).getCor() == cor).collect(Collectors.toList());
+		for(Peca p : list) {
+			boolean mat[][] = p.possiveisMoves();
+			for(int i = 0;i<tabuleiro.getLinhas(); i++) {
+				for(int j=0;j < tabuleiro.getColunas();j++) {
+					if(mat[i][j]) {
+						Posicao origem = ((PecaXadrez)p).getXadrezPosicao().posicionarPosicao();
+						Posicao destino = new Posicao(i, j);
+						Peca caputraPeca = fazerMover(origem, destino);
+						boolean testarCheck = testarCheck(cor);
+						desfazerMovimento(origem, destino, caputraPeca);
+						if(!testarCheck) {
+						return false;						
+					}
+				}
+			}
+			}
+		}
+		return true;
+	}
+	
 	private void colocarNovaPeca(char coluna, int linha, PecaXadrez peca) {
 		tabuleiro.reposicaoPeca(peca, new XadrezPosicao(coluna, linha).posicionarPosicao());
 		pecasNoTabuleiro.add(peca);
 	}
 	
 	private void inicialConf() {
-		colocarNovaPeca('c', 1, new Torre(tabuleiro, Cor.BRANCO));
-		colocarNovaPeca('c', 2, new Torre(tabuleiro, Cor.BRANCO));
-		colocarNovaPeca('d', 2, new Torre(tabuleiro, Cor.BRANCO));
-		colocarNovaPeca('e', 2, new Torre(tabuleiro, Cor.BRANCO));
-		colocarNovaPeca('e', 1, new Torre(tabuleiro, Cor.BRANCO));
-		colocarNovaPeca('d', 1, new King(tabuleiro, Cor.BRANCO));
-
-		colocarNovaPeca('c', 7, new Torre(tabuleiro, Cor.PRETO));
-		colocarNovaPeca('c', 8, new Torre(tabuleiro, Cor.PRETO));
-		colocarNovaPeca('d', 7, new Torre(tabuleiro, Cor.PRETO));
-		colocarNovaPeca('e', 7, new Torre(tabuleiro, Cor.PRETO));
-		colocarNovaPeca('e', 8, new Torre(tabuleiro, Cor.PRETO));
-		colocarNovaPeca('d', 8, new King(tabuleiro, Cor.PRETO));
+		colocarNovaPeca('h', 7, new Torre(tabuleiro, Cor.BRANCO));
+		colocarNovaPeca('d', 1, new Torre(tabuleiro, Cor.BRANCO));
+		colocarNovaPeca('e', 1, new King(tabuleiro, Cor.BRANCO));
+		
+		colocarNovaPeca('b', 8, new Torre(tabuleiro, Cor.PRETO));
+		colocarNovaPeca('a', 8, new King(tabuleiro, Cor.PRETO));
 	}
 }
 		
