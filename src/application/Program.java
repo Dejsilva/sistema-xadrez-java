@@ -41,7 +41,11 @@ public class Program {
 				
 				if(partidaXadrez.getPromocao() != null) {
 					System.out.print("Entre com peça de promoção (C/B/R/T: )");
-					String tipo = sc.nextLine();
+					String tipo = sc.nextLine().toUpperCase();
+					while(!tipo.equals("B") && !tipo.equals("C")  && !tipo.equals("T")  && !tipo.equals("R")){
+						System.out.print("Valor Invalido! Entre com umas das peças da promoção (C/B/R/T: ) " );
+						 tipo = sc.nextLine().toUpperCase();
+					}
 					partidaXadrez.substituirPecaPromo(tipo);
 				}
 			}
