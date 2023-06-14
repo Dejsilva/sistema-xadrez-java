@@ -66,7 +66,7 @@ public class Peao extends PecaXadrez{
 				if(getTabuleiro().posicaoExistente(p) &&  seExistePecaAdversaria(p)){
 					mat[p.getLinha()][p.getColuna()] = true;
 				}
-				p.setValues(posicao.getLinha() + 1, posicao.getColuna() - 1);
+				p.setValues(posicao.getLinha() + 1, posicao.getColuna() + 1);
 				if(getTabuleiro().posicaoExistente(p) &&  seExistePecaAdversaria(p)){
 					mat[p.getLinha()][p.getColuna()] = true;
 				}
